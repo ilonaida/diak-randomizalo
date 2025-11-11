@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diák Randomizáló</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        h1 { color: #333; }
+        textarea { width: 100%; min-height: 100px; padding: 10px; margin-bottom: 15px; box-sizing: border-box; }
+        button { padding: 10px 15px; margin-right: 10px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; }
+        button:hover { background-color: #0056b3; }
+        input[type="number"] { padding: 8px; width: 80px; margin-left: 5px; border: 1px solid #ccc; border-radius: 4px; }
+        .results { margin-top: 20px; padding: 15px; border: 1px solid #eee; background-color: #f9f9f9; border-radius: 5px; }
+        .group-output { margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; background-color: #fff; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+    <h1>Diákcsoport Randomizáló 🎲</h1>
+
+    <p>Írd be a diákok neveit vesszővel elválasztva (pl. "Nagy Ádám, Kis Éva, Kovács Péter, ..."):</p>
+    <textarea id="nameInput">Nagy Ádám, Kis Éva, Kovács Péter, Tóth Virág, Szabó Gábor, Varga Lili, Molnár Dávid, Horváth Hanna</textarea>
+
+    <div>
+        <button onclick="randomSort()">1. Nevek random sorrendbe</button>
+        <button onclick="drawStudent()">3. Egy diák kisorsolása</button>
+    </div>
+    <div style="margin-top: 10px;">
+        <button onclick="randomGroup()">2. Random csoportokba rendezés</button>
+        <label for="groupSize">Csoportméret:</label>
+        <input type="number" id="groupSize" value="3" min="1">
+    </div>
+
+    <hr>
+
+    <div class="results" id="output">
+        Válaszd ki a funkciót!
+    </div>
+
+    <script>
+        // Fisher-Yates (Knuth) keverési algoritmus: Egy tömb elemeit keveri véletlenszerűen.
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Segédfüggvény a nevek kinyerésére és tisztítására
+        function getNames() {
+            const input = document.getElementById('nameInput').value;
+            // Nevek szétválasztása vesszők és szóközök mentén, üres elemek eltávolítása
+            return input.split(',').map(name => name.trim()).filter(name => name.length > 0);
+        }
+
+        // 1. Diáknevek random sorba rakása
+        function randomSort() {
+            const names = getNames();
+            if (names.length === 0) {
+                document.getElementById('output').innerHTML = '<p>Kérlek, adj meg neveket!</p>';
+                return;
+            }
+
+            const shuffledNames = shuffleArray([...names]); // A tömb másolatának keverése
+            
+            let outputHTML = '<h2>✨ Random Sorrend:</h2><ol>';
+            shuffledNames.forEach(name => {
+                outputHTML += `<li>${name}</li>`;
+            });
+            outputHTML += '</ol>';
+            
+            document.getElementById('output').innerHTML = outputHTML;
+        }
+
+        // 2. Diákcsoport random csoportokba rendezése
+        function randomGroup() {
+            const names = getNames();
+            const groupSize = parseInt(document.getElementById('groupSize').value);
+
+            if (names.length === 0) {
+                document.getElementById('output').innerHTML = '<p>Kérlek, adj meg neveket!</p>';
+                return;
+            }
+            if (groupSize < 1 || isNaN(groupSize)) {
+                document.getElementById('output').innerHTML = '<p>Kérlek, érvényes csoportméretet (legalább 1) adj meg!</p>';
+                return;
+            }
+
+            const shuffledNames = shuffleArray([...names]);
+            const groups = [];
+            let currentGroup = [];
+            let groupNumber = 1;
+
+            for (const name of shuffledNames) {
+                currentGroup.push(name);
+                if (currentGroup.length === groupSize) {
+                    groups.push({ number: groupNumber++, members: currentGroup });
+                    currentGroup = [];
+                }
+            }
+
+            // Maradék diákok hozzáadása a meglévő csoportokhoz (egyenletesen)
+            for (let i = 0; i < currentGroup.length; i++) {
+                // A maradék diákot hozzáadja az i. csoporthoz (ciklikusan)
+                groups[i % groups.length].members.push(currentGroup[i]);
+            }
+
+            let outputHTML = `<h2>👥 Random Csoportok (${groupSize} fős csoportméret alapján):</h2>`;
+            if (groups.length === 0 && names.length > 0) {
+                 // Ha kevesebb diák van, mint a csoportméret
+                outputHTML += `<div class="group-output"><h3>Csoport 1</h3><p>${shuffledNames.join(', ')}</p></div>`;
+            } else {
+                groups.forEach(group => {
+                    outputHTML += `<div class="group-output"><h3>Csoport ${group.number} (${group.members.length} fő)</h3><p>${group.members.join(', ')}</p></div>`;
+                });
+            }
+
+            document.getElementById('output').innerHTML = outputHTML;
+        }
+
+        // 3. Egy tanuló 'kisorsolása'
+        function drawStudent() {
+            const names = getNames();
+            if (names.length === 0) {
+                document.getElementById('output').innerHTML = '<p>Kérlek, adj meg neveket!</p>';
+                return;
+            }
+
+            // Véletlenszerű index választása
+            const randomIndex = Math.floor(Math.random() * names.length);
+            const winner = names[randomIndex];
+
+            const outputHTML = `
+                <h2>🏆 Sorsolt Diák:</h2>
+                <p style="font-size: 24px; font-weight: bold; color: #dc3545;">${winner}</p>
+                <p>(${names.length} diák közül sorsolva)</p>
+            `;
+
+            document.getElementById('output').innerHTML = outputHTML;
+        }
+    </script>
+</body>
+</html>
