@@ -5,41 +5,123 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diák Randomizáló</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 800px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
-        h1 { color: #333; }
-        textarea { width: 100%; min-height: 100px; padding: 10px; margin-bottom: 15px; box-sizing: border-box; }
-        button { padding: 10px 15px; margin-right: 10px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; }
+        /* A képen látott dizájn elemek */
+        body {
+            font-family: 'Georgia', serif; /* Olvasható, klasszikus betűtípus a cikkekhez */
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #ffffff;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 700px; /* Szűk tartalom a jobb olvashatóságért */
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Címsor Stílus (Kiemelés) */
+        .headline-box {
+            font-family: 'Arial', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #f7f7f7; 
+            border-left: 5px solid #007bff; /* Kék színt adtam a sárga helyett a modern hangulathoz */
+        }
+        
+        p {
+            margin-bottom: 25px;
+            font-size: 19px;
+        }
+        
+        /* Szerző adatok (Fejlesztői infóvá alakítva) */
+        .author-box {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+        }
+        .author-box strong { font-weight: 600; font-size: 16px; }
+        .author-box span { font-size: 14px; color: #666; }
+
+        /* A funkciók elemeinek stílusai */
+        textarea { 
+            width: 100%; 
+            min-height: 100px; 
+            padding: 10px; 
+            margin-bottom: 15px; 
+            box-sizing: border-box; 
+            font-size: 16px; 
+        }
+        button { 
+            padding: 10px 15px; 
+            margin-right: 10px; 
+            cursor: pointer; 
+            background-color: #007bff; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+        }
         button:hover { background-color: #0056b3; }
-        input[type="number"] { padding: 8px; width: 80px; margin-left: 5px; border: 1px solid #ccc; border-radius: 4px; }
-        .results { margin-top: 20px; padding: 15px; border: 1px solid #eee; background-color: #f9f9f9; border-radius: 5px; }
-        .group-output { margin-bottom: 15px; padding: 10px; border: 1px solid #ddd; background-color: #fff; border-radius: 4px; }
+        input[type="number"] { 
+            padding: 8px; 
+            width: 80px; 
+            margin-left: 5px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            font-size: 16px;
+        }
+        .results { 
+            margin-top: 20px; 
+            padding: 15px; 
+            border: 1px solid #eee; 
+            background-color: #f9f9f9; 
+            border-radius: 5px; 
+        }
+        .group-output { 
+            margin-bottom: 15px; 
+            padding: 10px; 
+            border: 1px solid #ddd; 
+            background-color: #fff; 
+            border-radius: 4px; 
+        }
     </style>
 </head>
 <body>
 
-    <h1>Diákcsoport Randomizáló 🎲</h1>
+    <div class="container">
+        
+        <div class="headline-box">
+            Diák Randomizáló - Csoportosítás és Sorsolás
+        </div>
 
-    <p>Írd be a diákok neveit vesszővel elválasztva (pl. "Nagy Ádám, Kis Éva, Kovács Péter, ..."):</p>
-    <textarea id="nameInput">Nagy Ádám, Kis Éva, Kovács Péter, Tóth Virág, Szabó Gábor, Varga Lili, Molnár Dávid, Horváth Hanna</textarea>
+        <p>Írd be a diákok neveit vesszővel elválasztva:</p>
+        <textarea id="nameInput">Nagy Ádám, Kis Éva, Kovács Péter, Tóth Virág, Szabó Gábor, Varga Lili, Molnár Dávid, Horváth Hanna</textarea>
 
-    <div>
-        <button onclick="randomSort()">1. Nevek random sorrendbe</button>
-        <button onclick="drawStudent()">3. Egy diák kisorsolása</button>
-    </div>
-    <div style="margin-top: 10px;">
-        <button onclick="randomGroup()">2. Random csoportokba rendezés</button>
-        <label for="groupSize">Csoportméret:</label>
-        <input type="number" id="groupSize" value="3" min="1">
-    </div>
+        <div style="margin-bottom: 20px;">
+            <button onclick="randomSort()">1. Nevek random sorrendbe</button>
+            <button onclick="drawStudent()">3. Egy diák kisorsolása</button>
+        </div>
+        <div style="margin-bottom: 30px;">
+            <button onclick="randomGroup()">2. Random csoportokba rendezés</button>
+            <label for="groupSize">Csoportméret:</label>
+            <input type="number" id="groupSize" value="3" min="1">
+        </div>
+        <div class="results" id="output">
+            Válaszd ki a funkciót!
+        </div>
+        
+        <div class="author-box">
+            <div class="author-info">
+                <strong>Készítette: ilonaida</strong>
+                <span>Verzió: 1.0 (Cikk stílusú dizájn)</span>
+            </div>
+        </div>
 
-    <hr>
-
-    <div class="results" id="output">
-        Válaszd ki a funkciót!
-    </div>
-
-    <script>
-        // Fisher-Yates (Knuth) keverési algoritmus: Egy tömb elemeit keveri véletlenszerűen.
+    </div> <script>
+        // Fisher-Yates (Knuth) keverési algoritmus
         function shuffleArray(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
@@ -51,7 +133,6 @@
         // Segédfüggvény a nevek kinyerésére és tisztítására
         function getNames() {
             const input = document.getElementById('nameInput').value;
-            // Nevek szétválasztása vesszők és szóközök mentén, üres elemek eltávolítása
             return input.split(',').map(name => name.trim()).filter(name => name.length > 0);
         }
 
@@ -59,13 +140,13 @@
         function randomSort() {
             const names = getNames();
             if (names.length === 0) {
-                document.getElementById('output').innerHTML = '<p>Kérlek, adj meg neveket!</p>';
+                document.getElementById('output').innerHTML = '<p style="color:red;">Kérlek, adj meg neveket!</p>';
                 return;
             }
 
-            const shuffledNames = shuffleArray([...names]); // A tömb másolatának keverése
+            const shuffledNames = shuffleArray([...names]);
             
-            let outputHTML = '<h2>✨ Random Sorrend:</h2><ol>';
+            let outputHTML = '<h2>✨ Random Sorrend:</h2><ol style="font-size:18px;">';
             shuffledNames.forEach(name => {
                 outputHTML += `<li>${name}</li>`;
             });
@@ -79,12 +160,8 @@
             const names = getNames();
             const groupSize = parseInt(document.getElementById('groupSize').value);
 
-            if (names.length === 0) {
-                document.getElementById('output').innerHTML = '<p>Kérlek, adj meg neveket!</p>';
-                return;
-            }
-            if (groupSize < 1 || isNaN(groupSize)) {
-                document.getElementById('output').innerHTML = '<p>Kérlek, érvényes csoportméretet (legalább 1) adj meg!</p>';
+            if (names.length === 0 || groupSize < 1 || isNaN(groupSize)) {
+                document.getElementById('output').innerHTML = '<p style="color:red;">Kérlek, adj meg neveket és érvényes csoportméretet!</p>';
                 return;
             }
 
@@ -101,21 +178,21 @@
                 }
             }
 
-            // Maradék diákok hozzáadása a meglévő csoportokhoz (egyenletesen)
+            // Maradék diákok elosztása
             for (let i = 0; i < currentGroup.length; i++) {
-                // A maradék diákot hozzáadja az i. csoporthoz (ciklikusan)
-                groups[i % groups.length].members.push(currentGroup[i]);
+                if (groups.length > 0) {
+                    groups[i % groups.length].members.push(currentGroup[i]);
+                } else {
+                     // Ha nincs még csoport, de van maradék (mert a csoportméret nagyobb mint a teljes létszám)
+                    groups.push({ number: 1, members: currentGroup });
+                    break; 
+                }
             }
-
+            
             let outputHTML = `<h2>👥 Random Csoportok (${groupSize} fős csoportméret alapján):</h2>`;
-            if (groups.length === 0 && names.length > 0) {
-                 // Ha kevesebb diák van, mint a csoportméret
-                outputHTML += `<div class="group-output"><h3>Csoport 1</h3><p>${shuffledNames.join(', ')}</p></div>`;
-            } else {
-                groups.forEach(group => {
-                    outputHTML += `<div class="group-output"><h3>Csoport ${group.number} (${group.members.length} fő)</h3><p>${group.members.join(', ')}</p></div>`;
-                });
-            }
+            groups.forEach(group => {
+                outputHTML += `<div class="group-output"><h3>Csoport ${group.number} (${group.members.length} fő)</h3><p style="font-size:16px;">${group.members.join(', ')}</p></div>`;
+            });
 
             document.getElementById('output').innerHTML = outputHTML;
         }
@@ -124,17 +201,16 @@
         function drawStudent() {
             const names = getNames();
             if (names.length === 0) {
-                document.getElementById('output').innerHTML = '<p>Kérlek, adj meg neveket!</p>';
+                document.getElementById('output').innerHTML = '<p style="color:red;">Kérlek, adj meg neveket!</p>';
                 return;
             }
 
-            // Véletlenszerű index választása
             const randomIndex = Math.floor(Math.random() * names.length);
             const winner = names[randomIndex];
 
             const outputHTML = `
                 <h2>🏆 Sorsolt Diák:</h2>
-                <p style="font-size: 24px; font-weight: bold; color: #dc3545;">${winner}</p>
+                <p style="font-size: 28px; font-weight: bold; color: #dc3545;">${winner}</p>
                 <p>(${names.length} diák közül sorsolva)</p>
             `;
 
